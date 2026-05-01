@@ -1,0 +1,237 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Argent Bank Transactions API"
+  description: "API proposal for transaction management in Argent Bank"
+
+host: "localhost:3001"
+basePath: "/api/v1"
+schemes:
+  - "http"
+
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "Enter your bearer token in the format Bearer <token>"
+
+security:
+  - Bearer: []
+
+paths:
+  /user/transactions:
+    get:
+      tags:
+        - "Transactions Module"
+      summary: "Get monthly transactions grouped by account"
+      description: "Returns all transactions for the authenticated user for a given month, grouped by bank account."
+      parameters:
+        - in: query
+          name: month
+          type: string
+          required: true
+          description: "Month to retrieve in YYYY-MM format. Example: 2026-04"
+      responses:
+        "200":
+          description: "Monthly transactions retrieved successfully"
+          schema:
+            $ref: "#/definitions/MonthlyTransactionsResponse"
+        "400":
+          description: "Invalid month format"
+        "401":
+          description: "Unauthorized - missing or invalid token"
+        "500":
+          description: "Internal Server Error"
+
+  /user/accounts/{accountId}/transactions/{transactionId}:
+    get:
+      tags:
+        - "Transactions Module"
+      summary: "Get transaction details"
+      description: "Returns the full details of a specific transaction for a specific account."
+      parameters:
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: "Unique identifier of the bank account"
+        - in: path
+          name: transactionId
+          type: string
+          required: true
+          description: "Unique identifier of the transaction"
+      responses:
+        "200":
+          description: "Transaction details retrieved successfully"
+          schema:
+            $ref: "#/definitions/TransactionDetailResponse"
+        "400":
+          description: "Invalid accountId or transactionId"
+        "401":
+          description: "Unauthorized - missing or invalid token"
+        "404":
+          description: "Transaction not found"
+        "500":
+          description: "Internal Server Error"
+
+    patch:
+      tags:
+        - "Transactions Module"
+      summary: "Update editable transaction metadata"
+      description: "Updates editable information of a transaction such as category or notes. Sending an empty string removes the corresponding value."
+      parameters:
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: "Unique identifier of the bank account"
+        - in: path
+          name: transactionId
+          type: string
+          required: true
+          description: "Unique identifier of the transaction"
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionMetadataUpdateRequest"
+      responses:
+        "200":
+          description: "Transaction metadata updated successfully"
+          schema:
+            $ref: "#/definitions/TransactionDetailResponse"
+        "400":
+          description: "Invalid request body"
+        "401":
+          description: "Unauthorized - missing or invalid token"
+        "404":
+          description: "Transaction not found"
+        "500":
+          description: "Internal Server Error"
+
+definitions:
+  MonthlyTransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: "Monthly transactions retrieved successfully"
+      body:
+        type: array
+        items:
+          $ref: "#/definitions/AccountTransactionsGroup"
+
+  AccountTransactionsGroup:
+    type: object
+    properties:
+      accountId:
+        type: string
+        example: "checking-x8349"
+      accountName:
+        type: string
+        example: "Argent Bank Checking"
+      accountNumberMasked:
+        type: string
+        example: "x8349"
+      transactions:
+        type: array
+        items:
+          $ref: "#/definitions/TransactionSummary"
+
+  TransactionSummary:
+    type: object
+    properties:
+      transactionId:
+        type: string
+        example: "txn-1001"
+      date:
+        type: string
+        format: date
+        example: "2026-04-14"
+      description:
+        type: string
+        example: "Golden Sun Bakery"
+      amount:
+        type: number
+        format: double
+        example: 45.23
+      balance:
+        type: number
+        format: double
+        example: 2082.79
+      type:
+        type: string
+        example: "Electronic"
+      category:
+        type: string
+        example: "Food"
+      notes:
+        type: string
+        example: "Breakfast meeting"
+
+  TransactionDetailResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: "Transaction details retrieved successfully"
+      body:
+        $ref: "#/definitions/TransactionDetail"
+
+  TransactionDetail:
+    type: object
+    properties:
+      transactionId:
+        type: string
+        example: "txn-1001"
+      accountId:
+        type: string
+        example: "checking-x8349"
+      date:
+        type: string
+        format: date
+        example: "2026-04-14"
+      description:
+        type: string
+        example: "Golden Sun Bakery"
+      amount:
+        type: number
+        format: double
+        example: 45.23
+      balance:
+        type: number
+        format: double
+        example: 2082.79
+      type:
+        type: string
+        example: "Electronic"
+      category:
+        type: string
+        example: "Food"
+      notes:
+        type: string
+        example: "Breakfast meeting"
+
+  TransactionMetadataUpdateRequest:
+    type: object
+    properties:
+      category:
+        type: string
+        example: "Travel"
+        description: "Category of the transaction. Send an empty string to remove the category."
+      notes:
+        type: string
+        example: "Train ticket reimbursement"
+        description: "Additional notes for the transaction. Send an empty string to remove the note."
