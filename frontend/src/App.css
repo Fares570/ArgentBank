@@ -40,3 +40,137 @@
 .read-the-docs {
   color: #888;
 }
+
+.transaction-page {
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  background-color: #ffffff;
+  padding: 2rem 0 3rem;
+  color: #2c3e50;
+}
+
+.transaction-account-card {
+  width: 75%;
+  max-width: 1000px;
+  margin: 0 auto 1.5rem auto;
+  background-color: #2f2f2f;
+  color: white;
+  border-radius: 5px;
+  padding: 1.4rem 1.7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-account-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.transaction-account-amount {
+  margin: 0.35rem 0;
+  font-size: 2.8rem;
+  font-weight: 500;
+}
+
+.transaction-account-description {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.transaction-close-button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 5rem;
+  line-height: 1;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.transaction-table {
+  width: 75%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.transaction-table-header {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr 1fr 1fr 40px;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.transaction-line {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr 1fr 1fr 40px;
+  align-items: center;
+  background-color: #00bc77;
+  color: white;
+  padding: 0.35rem 1rem;
+  margin-bottom: 0.55rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.transaction-arrow {
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.transaction-details {
+  background-color: #00bc77;
+  color: white;
+  padding: 0.75rem 1rem 1rem;
+  margin-top: -0.55rem;
+  margin-bottom: 0.8rem;
+  border-radius: 0 0 4px 4px;
+}
+
+.transaction-details p {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  margin: 0.45rem 0;
+  font-size: 0.95rem;
+}
+
+.transaction-details strong {
+  font-weight: 500;
+}
+
+.transaction-pencil {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transaction-account-card,
+  .transaction-table {
+    width: 90%;
+  }
+
+  .transaction-account-amount {
+    font-size: 2rem;
+  }
+
+  .transaction-close-button {
+    font-size: 3.5rem;
+  }
+
+  .transaction-table-header,
+  .transaction-line {
+    grid-template-columns: 1fr 1.6fr 1fr 1fr 30px;
+    font-size: 0.8rem;
+    padding: 0.35rem;
+  }
+
+  .transaction-details p {
+    grid-template-columns: 120px 1fr;
+    font-size: 0.85rem;
+  }
+}
